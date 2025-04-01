@@ -1,3 +1,5 @@
+## setup work dir
+work_dir = ./
 ## archlinuxcn keyring trust
 sudo pacman-key --lsign-key "farseerfc@archlinux.org"
 sudo pacman -S archlinuxcn-keyring
@@ -10,9 +12,10 @@ yay -S uefitool ast-firmware   \
 
 ## create a buffet to save/keep source code and binary file for install system
 mkdir -p ~/buffer
+cd ~/buffer
 git clone https://aur.archlinux.org/upd72020x-fw.git
+makepkg -si # make upd702020x-fw package for archlinux
 
-sudo pacman -U ./package/upd72020x-fw-1:1.0.0-2-any.pkg.tar.zst
 ### extra
 sudo pacman  -S iqsc alse-firmware gnome-firmware \
         qemu-system-x86-firmware sof-firmware fwupd 
@@ -38,3 +41,5 @@ cp -r ./nvim ~/.config/
 
 ## alacritty config file setup
 cp  -r ./alacritty ~/.config/ 
+
+
