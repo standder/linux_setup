@@ -135,28 +135,81 @@ for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 # }}} End configuration added by Zim install
 
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/standder/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
- source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/autojump/autojump.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Created by newuser for 5.9
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-#export DRI_PRIME=1
-alias nvid="neovide &"
-alias foam="source ~/openfoam/OpenFOAM-v2312/etc/bashrc"
-
-alias egpu="export DRI_PRIME=1"
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+#
+#-----------------------------分割线-----------------------------------------------------#
+#egpu
+export DRI_PRIME=1
 alias negpu="export DRI_PRIME=0"
+alias egpu="__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia"
+
+export LANG=zh_CN.UTF-8
+export SDL_VIDEODRIVER=wayland
+
+#-----------------------------分割线-----------------------------------------------------#
+#vi mode
+set -o vi
+
+#-----------------------------分割线-----------------------------------------------------#
+# CTRL-Y to copy the command into clipboard using pbcopy
+FZF_ALT_C_COMMAND= source <(fzf --zsh)
+export FZF_CTRL_R_OPTS="
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'Press CTRL-Y to copy command into clipboard'"
+
+# Print tree structure in the preview window
+export FZF_ALT_C_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'tree -C {}'"
+
+
+# Use ~~ as the trigger sequence instead of the default **
+export FZF_COMPLETION_TRIGGER='\'
+
+# Options to fzf command
+export FZF_COMPLETION_OPTS='--border --info=inline'
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+    export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+  esac
+}
+
+
+#-----------------------------分割线-----------------------------------------------------#
+# tui mail client setup
+alias mail="neomutt -F /home/standder/.muttrc"
+
+#. "$HOME/.local/bin/env"
+#-----------------------------分割线-----------------------------------------------------#
+# set ssh enviroment
+eval $(ssh-agent -s) > /dev/null 2>&1
+#ssh-add ~/.ssh/ssh_ket1 << EOF
+
+
