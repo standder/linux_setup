@@ -1,0 +1,14 @@
+[core]
+        editor = nvim
+
+[user]
+        name = standder
+        email = standder2@gmail.com
+[init]
+	defaultBranch = main
+
+[sendemail]
+        	smtpserver = mail.example.org
+	smtpuser = you@example.org
+	smtpencryption = ssl
+	smtpserverport = 465
