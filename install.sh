@@ -1,3 +1,33 @@
+## archlinuxcn keyring trust
+sudo pacman-key --lsign-key "farseerfc@archlinux.org"
+sudo pacman -S archlinuxcn-keyring
+
+## firmware install
+### aur
+yay -S uefitool ast-firmware   \
+         wd719x-firmware aic94xx-firmware \
+        asahi-fwextract 
+
+## create a buffet to save/keep source code and binary file for install system
+mkdir -p ~/buffer
+git clone https://aur.archlinux.org/upd72020x-fw.git
+
+sudo pacman -U ./package/upd72020x-fw-1:1.0.0-2-any.pkg.tar.zst
+### extra
+sudo pacman  -S iqsc alse-firmware gnome-firmware \
+        qemu-system-x86-firmware sof-firmware fwupd 
+### core
+sudo pacman -S b43-fwcutter linux-firmware-whence \
+        linux-firmware-liquidio linux-firmware-bnx2x \
+        linux-firmware-mellanox linux-firmware-marvell \
+        linux-firmware-qlogic linux-firmware-nfp \
+        linux-firmware-qcom linux-firmware
+
+yay -S mkinitcpio-firmware
+
+
+## software install 
+sudo pacman -S ttf-jetbrains-mono-nerd fd fzf
 ## packer nvim setup
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
         ~/.local/share/nvim/site/pack/packer/start/packer.nvim
@@ -7,4 +37,4 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
 cp -r ./nvim ~/.config/
 
 ## alacritty config file setup
-cp ./alacritty ~/.config/ -r
+cp  -r ./alacritty ~/.config/ 
